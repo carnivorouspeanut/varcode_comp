@@ -31,6 +31,7 @@ def add_variant_args(arg_parser):
         --maf
         --variant
         --json-variants
+        --use_ref_pos
     """
     variant_arg_group = arg_parser.add_argument_group(
         title="Variants",
@@ -41,6 +42,12 @@ def add_variant_args(arg_parser):
         default=[],
         action="append",
         help="Genomic variants in VCF format")
+    
+    variant_arg_group.add_argument(
+        "--use_ref_pos",
+        default=False,
+        action="append",
+        help="Whether to load non-mutant vcf: ref=alt")
 
     variant_arg_group.add_argument(
         "--maf",
