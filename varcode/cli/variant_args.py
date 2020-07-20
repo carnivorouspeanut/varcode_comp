@@ -94,7 +94,7 @@ def make_variants_parser(**kwargs):
     add_variant_args(parser)
     return parser
 
-def variant_collection_from_args(args, required=True):
+def variant_collection_from_args(args, required=True, use_ref_pos=False):
     variant_collections = []
 
     if args.genome:
@@ -105,7 +105,7 @@ def variant_collection_from_args(args, required=True):
         genome = None
 
     for vcf_path in args.vcf:
-        variant_collections.append(load_vcf(vcf_path, genome=genome))
+        variant_collections.append(load_vcf(vcf_path, genome=genome, use_ref_pos=use_ref_pos))
     for maf_path in args.maf:
         variant_collections.append(load_maf(maf_path))
 
