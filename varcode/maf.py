@@ -205,7 +205,7 @@ def load_maf(
                 ref,
                 alt,
                 **variant_kwargs)
-             else:
+            else:
                 variant = Variant(
                 chrom,
                 int(pos),  # want a Python int not numpy.int64
