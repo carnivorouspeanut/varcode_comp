@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# additions: original_alt and trimmed_alt >> ref. Also, the final variant object have old_alt varuable now (for getting transcripts)
 from __future__ import print_function, division, absolute_import
 
 from pyensembl import (
@@ -42,6 +43,7 @@ class Variant(Serializable):
         "end",
         "ref",
         "alt",
+        "old_alt",
         "ensembl",
         "normalize_contig_name",
         "allow_extended_nucleotides",
@@ -59,6 +61,7 @@ class Variant(Serializable):
             start,
             ref,
             alt,
+            old_alt,
             ensembl=ensembl_grch38,
             allow_extended_nucleotides=False,
             normalize_contig_name=True):
@@ -116,7 +119,8 @@ class Variant(Serializable):
         if ref != alt and ref in STANDARD_NUCLEOTIDES and alt in STANDARD_NUCLEOTIDES:
             # Optimization for common case.
             self.original_ref = self.ref = ref
-            self.original_alt = self.alt = alt
+            self.old_alt = alt
+            self.original_alt = self.alt = ref
             self.original_start = self.start = self.end = int(start)
             return
 
@@ -135,19 +139,22 @@ class Variant(Serializable):
         self.original_ref = normalize_nucleotide_string(
             ref,
             allow_extended_nucleotides=allow_extended_nucleotides)
-        self.original_alt = normalize_nucleotide_string(
+        self.original_alt_tricky = normalize_nucleotide_string(
             alt,
             allow_extended_nucleotides=allow_extended_nucleotides)
         self.original_start = int(start)
-
+        self.original_alt = normalize_nucleotide_string(
+            ref,
+            allow_extended_nucleotides=allow_extended_nucleotides)
         # normalize the variant by trimming any shared prefix or suffix
         # between ref and alt nucleotide sequences and then
         # offset the variant position in a strand-dependent manner
         (trimmed_ref, trimmed_alt, prefix, suffix) = (
-            trim_shared_flanking_strings(self.original_ref, self.original_alt))
+            trim_shared_flanking_strings(self.original_ref, self.original_alt_tricky))
 
         self.ref = trimmed_ref
-        self.alt = trimmed_alt
+        self.alt = trimmed_ref
+        self.old_alt = trimmed_alt
 
         if len(trimmed_ref) == 0:
             # insertions must be treated differently since the meaning of a
@@ -176,11 +183,12 @@ class Variant(Serializable):
         return self.ensembl.reference_name
 
     def __str__(self):
-        return "Variant(contig='%s', start=%d, ref='%s', alt='%s', reference_name='%s')" % (
+        return "Variant(contig='%s', start=%d, ref='%s', alt='%s', old_alt='%s', reference_name='%s')" % (
             self.contig,
             self.start,
             self.ref,
             self.alt,
+            self.old_alt,
             self.reference_name)
 
     def __repr__(self):

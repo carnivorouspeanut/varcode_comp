@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# additions: old_alt is added
+
 
 from __future__ import absolute_import, print_function, division
 import os
@@ -273,6 +275,7 @@ def dataframes_to_variant_collection(
 
             for tpl in chunk.itertuples():
                 (i, chrom, pos, id_, ref, alts, qual, flter) = tpl[:8]
+                old_alt = ''
                 if flter == ".":
                     flter = None
                 elif flter == "PASS":
@@ -302,6 +305,7 @@ def dataframes_to_variant_collection(
                             int(pos),  # want a Python int not numpy.int64
                             ref,
                             alt,
+                            old_alt,
                             **variant_kwargs)
                         variants.append(variant)
                         metadata[variant] = {
