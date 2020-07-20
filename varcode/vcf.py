@@ -44,7 +44,8 @@ def load_vcf(
         chunk_size=10 ** 5,
         max_variants=None,
         sort_key=variant_ascending_position_sort_key,
-        distinct=True):
+        distinct=True, 
+        use_ref_pos = False):
     """
     Load reference name and Variant objects from the given VCF filename.
 
@@ -296,13 +297,22 @@ def dataframes_to_variant_collection(
                                     list(tpl[10:]),  # sample info columns
                                     tpl[9],    # FORMAT column
                                 )
-
-                        variant = Variant(
-                            chrom,
-                            int(pos),  # want a Python int not numpy.int64
-                            ref,
-                            alt,
-                            **variant_kwargs)
+ 
+                        if use_ref_pos:
+                                variant = Variant_ref(
+                                    chrom,
+                                    int(pos),  # want a Python int not numpy.int64
+                                    ref,
+                                    alt,
+                                    **variant_kwargs)
+                        else:
+                                 variant = Variant(
+                                    chrom,
+                                    int(pos),  # want a Python int not numpy.int64
+                                    ref,
+                                    alt,
+                                    **variant_kwargs)  
+                                
                         variants.append(variant)
                         metadata[variant] = {
                             'id': id_,
