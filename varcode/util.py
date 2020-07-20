@@ -79,9 +79,6 @@ def random_variants(
                 alt_nucleotides.append("")
             alt = rng.choice(alt_nucleotides)
         
-# here, we make a decision whether we use Variant or Variant.ref, depending on out purposes
-            if 
-        
             variant = Variant(
                 transcript.contig,
                 base1_genomic_position,
