@@ -20,7 +20,7 @@ from typechecks import require_string
 from pandas import isnull
 
 from .reference import infer_genome
-from .variant import Variant, variant_ascending_position_sort_key, Variant_ref
+from .variant import Variant, variant_ascending_position_sort_key
 from .variant_collection import VariantCollection
 
 TCGA_PATIENT_ID_LENGTH = 12
@@ -117,8 +117,7 @@ def load_maf(
         sort_key=variant_ascending_position_sort_key,
         distinct=True,
         raise_on_error=True,
-        encoding=None, 
-        use_ref_pos=False):
+        encoding=None):
     """
     Load reference name and Variant objects from MAF filename.
 
@@ -198,20 +197,12 @@ def load_maf(
                     continue
             alt = x.Tumor_Seq_Allele2
 
-            if use_ref_pos:
-                variant = Variant_ref(
-                chrom,
-                int(pos),  # want a Python int not numpy.int64
-                ref,
-                alt,
-                **variant_kwargs)
-            else:
-                variant = Variant(
-                chrom,
-                int(pos),  # want a Python int not numpy.int64
-                ref,
-                alt,
-                **variant_kwargs) 
+        variant = Variant(
+            contig,
+            start_pos,
+            str(ref),
+            str(alt),
+            ensembl=ensembl)
 
         # keep metadata about the variant and its TCGA annotation
         metadata[variant] = {
