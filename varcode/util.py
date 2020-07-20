@@ -20,7 +20,7 @@ from pyensembl import EnsemblRelease
 from pyensembl import MAX_ENSEMBL_RELEASE
 
 from .nucleotides import STANDARD_NUCLEOTIDES
-from .variant import Variant
+from .variant import Variant, Variant_ref
 from .variant_collection import VariantCollection
 
 # cache lists of all transcript IDs for difference Ensembl releases
@@ -78,6 +78,10 @@ def random_variants(
             if deletions:
                 alt_nucleotides.append("")
             alt = rng.choice(alt_nucleotides)
+        
+# here, we make a decision whether we use Variant or Variant.ref, depending on out purposes
+            if 
+        
             variant = Variant(
                 transcript.contig,
                 base1_genomic_position,
