@@ -129,7 +129,8 @@ def load_vcf(
                 chunk_size=chunk_size,
                 max_variants=max_variants,
                 sort_key=sort_key,
-                distinct=distinct)
+                distinct=distinct, 
+                use_ref_pos=use_ref_pos,)
         finally:
             logger.info("Removing temporary file: %s", filename)
             os.unlink(filename)
@@ -175,6 +176,7 @@ def load_vcf(
         max_variants=max_variants,
         sample_names=handle.vcf_reader.samples if include_info else None,
         sample_info_parser=sample_info_parser,
+        use_ref_pos=use_ref_pos, 
         variant_kwargs={
             'ensembl': genome,
             'allow_extended_nucleotides': allow_extended_nucleotides},
