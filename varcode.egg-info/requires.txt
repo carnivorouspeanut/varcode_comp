@@ -1,0 +1,8 @@
+numpy<2.0,>=1.7
+pandas>=0.15
+pyensembl>=1.0.3
+biopython>=1.64
+pyvcf>=0.6.7
+memoized_property>=1.0.2
+serializable>=0.0.8
+sercol>=0.1.0

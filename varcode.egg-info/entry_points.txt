@@ -1,0 +1,3 @@
+[console_scripts]
+varcode-variants = varcode.cli.variants_script:main
+
