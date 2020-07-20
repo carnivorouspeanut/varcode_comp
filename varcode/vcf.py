@@ -27,7 +27,7 @@ from typechecks import require_string
 import vcf as pyvcf
 
 from .reference import infer_genome
-from .variant import Variant, variant_ascending_position_sort_key
+from .variant import Variant, variant_ascending_position_sort_key, Variant_ref
 from .variant_collection import VariantCollection
 
 
