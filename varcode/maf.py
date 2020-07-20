@@ -117,7 +117,8 @@ def load_maf(
         sort_key=variant_ascending_position_sort_key,
         distinct=True,
         raise_on_error=True,
-        encoding=None):
+        encoding=None, 
+        use_ref_pos=False):
     """
     Load reference name and Variant objects from MAF filename.
 
@@ -197,12 +198,20 @@ def load_maf(
                     continue
             alt = x.Tumor_Seq_Allele2
 
-        variant = Variant(
-            contig,
-            start_pos,
-            str(ref),
-            str(alt),
-            ensembl=ensembl)
+            if use_ref_pos:
+                variant = Variant_ref(
+                chrom,
+                int(pos),  # want a Python int not numpy.int64
+                ref,
+                alt,
+                **variant_kwargs)
+             else:
+                variant = Variant(
+                chrom,
+                int(pos),  # want a Python int not numpy.int64
+                ref,
+                alt,
+                **variant_kwargs) 
 
         # keep metadata about the variant and its TCGA annotation
         metadata[variant] = {
