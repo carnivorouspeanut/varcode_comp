@@ -45,7 +45,7 @@ def load_vcf(
         max_variants=None,
         sort_key=variant_ascending_position_sort_key,
         distinct=True, 
-        use_ref_pos = False):
+        use_ref_pos=False):
     """
     Load reference name and Variant objects from the given VCF filename.
 
@@ -209,7 +209,8 @@ def dataframes_to_variant_collection(
         sample_names=None,
         sample_info_parser=None,
         variant_kwargs={},
-        variant_collection_kwargs={}):
+        variant_collection_kwargs={}, 
+        use_ref_pos=False):
     """
     Load a VariantCollection from an iterable of pandas dataframes.
 
