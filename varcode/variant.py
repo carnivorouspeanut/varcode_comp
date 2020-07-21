@@ -511,6 +511,9 @@ class Variant_ref(Serializable):
         self.original_ref = normalize_nucleotide_string(
             ref,
             allow_extended_nucleotides=allow_extended_nucleotides)
+        self.original_alt_tricky = normalize_nucleotide_string(
+            alt,
+            allow_extended_nucleotides=allow_extended_nucleotides)
         self.original_alt = normalize_nucleotide_string(
             ref,
             allow_extended_nucleotides=allow_extended_nucleotides)
@@ -520,7 +523,7 @@ class Variant_ref(Serializable):
         # between ref and alt nucleotide sequences and then
         # offset the variant position in a strand-dependent manner
         (trimmed_ref, trimmed_alt, prefix, suffix) = (
-            trim_shared_flanking_strings(self.original_ref, self.original_alt))
+            trim_shared_flanking_strings(self.original_ref, self.original_alt_tricky))
 
         self.ref = trimmed_ref
         self.alt = trimmed_ref
