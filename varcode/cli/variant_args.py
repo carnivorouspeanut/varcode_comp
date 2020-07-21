@@ -46,7 +46,6 @@ def add_variant_args(arg_parser):
     variant_arg_group.add_argument(
         "--use_ref_pos",
         default=False,
-        action="append",
         help="Whether to load non-mutant vcf: ref=alt")
 
     variant_arg_group.add_argument(
