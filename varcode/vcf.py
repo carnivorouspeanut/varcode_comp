@@ -277,6 +277,7 @@ def dataframes_to_variant_collection(
 
             for tpl in chunk.itertuples():
                 (i, chrom, pos, id_, ref, alts, qual, flter) = tpl[:8]
+                old_alt = ''
                 if flter == ".":
                     flter = None
                 elif flter == "PASS":
@@ -307,6 +308,7 @@ def dataframes_to_variant_collection(
                                     int(pos),  # want a Python int not numpy.int64
                                     ref,
                                     alt,
+                                    old_alt,
                                     **variant_kwargs)
                         else:
                                  variant = Variant(
@@ -314,6 +316,7 @@ def dataframes_to_variant_collection(
                                     int(pos),  # want a Python int not numpy.int64
                                     ref,
                                     alt,
+                                    old_alt,
                                     **variant_kwargs)  
                                 
                         variants.append(variant)
