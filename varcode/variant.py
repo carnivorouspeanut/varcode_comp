@@ -42,6 +42,7 @@ class Variant(Serializable):
         "end",
         "ref",
         "alt",
+        "old_alt",
         "ensembl",
         "normalize_contig_name",
         "allow_extended_nucleotides",
@@ -59,6 +60,7 @@ class Variant(Serializable):
             start,
             ref,
             alt,
+            old_alt,
             ensembl=ensembl_grch38,
             allow_extended_nucleotides=False,
             normalize_contig_name=True):
@@ -118,6 +120,7 @@ class Variant(Serializable):
             self.original_ref = self.ref = ref
             self.original_alt = self.alt = alt
             self.original_start = self.start = self.end = int(start)
+            self.old_alt = alt
             return
 
         # we want to preserve the ref/alt/pos both as they appeared in the
@@ -148,6 +151,7 @@ class Variant(Serializable):
 
         self.ref = trimmed_ref
         self.alt = trimmed_alt
+        self.old_alt = trimmed_alt
 
         if len(trimmed_ref) == 0:
             # insertions must be treated differently since the meaning of a
@@ -176,11 +180,12 @@ class Variant(Serializable):
         return self.ensembl.reference_name
 
     def __str__(self):
-        return "Variant(contig='%s', start=%d, ref='%s', alt='%s', reference_name='%s')" % (
+        return "Variant(contig='%s', start=%d, ref='%s', alt='%s', old_alt='%s', reference_name='%s')" % (
             self.contig,
             self.start,
             self.ref,
             self.alt,
+            self.old_alt
             self.reference_name)
 
     def __repr__(self):
@@ -417,6 +422,7 @@ class Variant_ref(Serializable):
         "end",
         "ref",
         "alt",
+        "old_alt",
         "ensembl",
         "normalize_contig_name",
         "allow_extended_nucleotides",
@@ -434,6 +440,7 @@ class Variant_ref(Serializable):
             start,
             ref,
             alt,
+            old_alt,
             ensembl=ensembl_grch38,
             allow_extended_nucleotides=False,
             normalize_contig_name=True):
@@ -485,6 +492,7 @@ class Variant_ref(Serializable):
             # Optimization for common case.
             self.original_ref = self.ref = ref
             self.original_alt = self.alt = ref
+            self.old_alt = alt
             self.original_start = self.start = self.end = int(start)
             return
 
@@ -516,6 +524,7 @@ class Variant_ref(Serializable):
 
         self.ref = trimmed_ref
         self.alt = trimmed_ref
+        self.old_alt = trimmed_alt
 
         if len(trimmed_ref) == 0:
             # insertions must be treated differently since the meaning of a
@@ -544,11 +553,12 @@ class Variant_ref(Serializable):
         return self.ensembl.reference_name
 
     def __str__(self):
-        return "Variant(contig='%s', start=%d, ref='%s', alt='%s', reference_name='%s')" % (
+        return "Variant(contig='%s', start=%d, ref='%s', alt='%s', old_alt='%s', reference_name='%s')" % (
             self.contig,
             self.start,
             self.ref,
             self.alt,
+            self.old_alt,
             self.reference_name)
 
     def __repr__(self):
