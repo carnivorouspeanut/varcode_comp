@@ -101,6 +101,7 @@ def make_variants_parser(**kwargs):
     return parser
 
 def variant_collection_from_args(args, required=True):
+    print(args.genome)
     variant_collections = []
 
     if args.genome:
