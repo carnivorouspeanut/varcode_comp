@@ -167,7 +167,7 @@ def load_vcf(
                     unparsed_sample_info_strings, format_string, None))
     else:
         sample_info_parser = None
-
+    print(genome)
     return dataframes_to_variant_collection(
         df_iterator,
         source_path=path,
@@ -308,7 +308,6 @@ def dataframes_to_variant_collection(
                                     int(pos),  # want a Python int not numpy.int64
                                     ref,
                                     alt,
-                                    old_alt,
                                     **variant_kwargs)
                         else:
                                  variant = Variant(
@@ -316,7 +315,6 @@ def dataframes_to_variant_collection(
                                     int(pos),  # want a Python int not numpy.int64
                                     ref,
                                     alt,
-                                    old_alt,
                                     **variant_kwargs)  
                                 
                         variants.append(variant)
