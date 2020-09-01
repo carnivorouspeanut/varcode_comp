@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .variant import Variant
+from .variant import Variant, Variant_ref
 from .variant_collection import VariantCollection
 from .maf import load_maf, load_maf_dataframe
 from .vcf import load_vcf, load_vcf_fast

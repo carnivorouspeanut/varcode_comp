@@ -31,6 +31,7 @@ def add_variant_args(arg_parser):
         --maf
         --variant
         --json-variants
+        --use_ref_pos
     """
     variant_arg_group = arg_parser.add_argument_group(
         title="Variants",
@@ -41,6 +42,11 @@ def add_variant_args(arg_parser):
         default=[],
         action="append",
         help="Genomic variants in VCF format")
+    
+    variant_arg_group.add_argument(
+        "--use_ref_pos",
+        default=False,
+        help="Whether to load non-mutant vcf: ref=alt")
 
     variant_arg_group.add_argument(
         "--maf",
@@ -103,9 +109,17 @@ def variant_collection_from_args(args, required=True):
         # no genome specified, assume it can be inferred from the file(s)
         # we're loading
         genome = None
-
+    
+    if args.use_ref_pos:
+        use_ref_pos = args.use_ref_pos
+    else:
+        use_ref_pos = False
+        
     for vcf_path in args.vcf:
-        variant_collections.append(load_vcf(vcf_path, genome=genome))
+        print(vcf_path)
+        print(genome)
+        print(use_ref_pos)
+        variant_collections.append(load_vcf(vcf_path, genome=genome, use_ref_pos=use_ref_pos))
     for maf_path in args.maf:
         variant_collections.append(load_maf(maf_path))
 

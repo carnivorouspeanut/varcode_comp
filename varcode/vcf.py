@@ -27,7 +27,7 @@ from typechecks import require_string
 import vcf as pyvcf
 
 from .reference import infer_genome
-from .variant import Variant, variant_ascending_position_sort_key
+from .variant import Variant, variant_ascending_position_sort_key, Variant_ref
 from .variant_collection import VariantCollection
 
 
@@ -44,7 +44,8 @@ def load_vcf(
         chunk_size=10 ** 5,
         max_variants=None,
         sort_key=variant_ascending_position_sort_key,
-        distinct=True):
+        distinct=True, 
+        use_ref_pos=False):
     """
     Load reference name and Variant objects from the given VCF filename.
 
@@ -128,7 +129,8 @@ def load_vcf(
                 chunk_size=chunk_size,
                 max_variants=max_variants,
                 sort_key=sort_key,
-                distinct=distinct)
+                distinct=distinct, 
+                use_ref_pos=use_ref_pos,)
         finally:
             logger.info("Removing temporary file: %s", filename)
             os.unlink(filename)
@@ -165,7 +167,7 @@ def load_vcf(
                     unparsed_sample_info_strings, format_string, None))
     else:
         sample_info_parser = None
-
+    print(genome)
     return dataframes_to_variant_collection(
         df_iterator,
         source_path=path,
@@ -174,6 +176,7 @@ def load_vcf(
         max_variants=max_variants,
         sample_names=handle.vcf_reader.samples if include_info else None,
         sample_info_parser=sample_info_parser,
+        use_ref_pos=use_ref_pos, 
         variant_kwargs={
             'ensembl': genome,
             'allow_extended_nucleotides': allow_extended_nucleotides},
@@ -208,7 +211,8 @@ def dataframes_to_variant_collection(
         sample_names=None,
         sample_info_parser=None,
         variant_kwargs={},
-        variant_collection_kwargs={}):
+        variant_collection_kwargs={}, 
+        use_ref_pos=False):
     """
     Load a VariantCollection from an iterable of pandas dataframes.
 
@@ -273,6 +277,7 @@ def dataframes_to_variant_collection(
 
             for tpl in chunk.itertuples():
                 (i, chrom, pos, id_, ref, alts, qual, flter) = tpl[:8]
+                old_alt = ''
                 if flter == ".":
                     flter = None
                 elif flter == "PASS":
@@ -296,13 +301,22 @@ def dataframes_to_variant_collection(
                                     list(tpl[10:]),  # sample info columns
                                     tpl[9],    # FORMAT column
                                 )
-
-                        variant = Variant(
-                            chrom,
-                            int(pos),  # want a Python int not numpy.int64
-                            ref,
-                            alt,
-                            **variant_kwargs)
+ 
+                        if use_ref_pos:
+                                variant = Variant_ref(
+                                    chrom,
+                                    int(pos),  # want a Python int not numpy.int64
+                                    ref,
+                                    alt,
+                                    **variant_kwargs)
+                        else:
+                                 variant = Variant(
+                                    chrom,
+                                    int(pos),  # want a Python int not numpy.int64
+                                    ref,
+                                    alt,
+                                    **variant_kwargs)  
+                                
                         variants.append(variant)
                         metadata[variant] = {
                             'id': id_,
